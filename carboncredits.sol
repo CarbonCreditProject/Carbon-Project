@@ -16,12 +16,14 @@ struct CarbonCreditHolder {
     uint creditsHeld;
     uint pricepercredit;
     uint creditvalidityperiod;
+    address _addr;
 }
 struct verifier {
     string name;
     string homeCountry;
     uint reg_no;
     uint license_no;
+    address addr;
     bool isExist;
 }
 struct customer {
@@ -36,7 +38,7 @@ mapping (uint => verifier) public verifiers;
 mapping(uint => customer) public customers;
 
 
-event newCreditHolder(string name, uint holderId, uint creditsHeld, uint pricepercredit, uint creditvalidityperiod);
+event newCreditHolder(string name, uint holderId, uint creditsHeld, uint pricepercredit, uint creditvalidityperiod, address _addr);
 
 function registerCreditHolder(string memory name, uint holderId, uint creditsHeld, uint pricepercredit, uint creditvalidityperiod) public {
     totalRegistered++;
@@ -46,15 +48,16 @@ function registerCreditHolder(string memory name, uint holderId, uint creditsHel
         holderId,
         creditsHeld,
         pricepercredit,
-        creditvalidityperiod);
-    emit newCreditHolder(name, holderId, creditsHeld, pricepercredit,creditvalidityperiod);
+        creditvalidityperiod,
+        msg.sender);
+    emit newCreditHolder(name, holderId, creditsHeld, pricepercredit,creditvalidityperiod, msg.sender);
 }
 function registerVerifiers(string memory name, string memory homeCountry, uint reg_no, uint license_no) public {
         verifiercount++;
         // check if verifier exist already
         require(verifiers[reg_no].isExist==false, "validator already registered");
         // require(license_no == ISO database, "you dont have a license to operate");
-        verifiers[verifiercount]=verifier(name,homeCountry,reg_no,license_no,true);
+        verifiers[verifiercount]=verifier(name,homeCountry,reg_no,license_no,msg.sender,true);
 }
 function registerCustomer(string memory first_name, string memory last_name, string memory email, uint contact) public{
     customercount++;
@@ -87,5 +90,5 @@ function getCustomerProfile(address _owner) public view onlyOwner() returns(cust
     }
     return result;
 }
-
+  
 }
