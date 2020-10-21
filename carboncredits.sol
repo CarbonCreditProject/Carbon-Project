@@ -3,7 +3,7 @@ pragma experimental ABIEncoderV2;
 
 import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol';
 
-
+//SPDX-License-Identifier: UNLICENSED
 contract CarbonCredits is Ownable {
 
 uint totalRegistered = 0;
